@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             for (let i = 0; i < toDos.length; i++) {
                 let todo = toDos[i];
                 const toDoItem = document.createElement('li');
+                toDoItem.setAttribute('data-testid', 'toDoItem')
                 toDoItem.textContent = todo.text;
                 todoList.appendChild(toDoItem);
             }
