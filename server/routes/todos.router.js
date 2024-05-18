@@ -16,7 +16,6 @@ router.post('/', (req, res) => {
   const { text } = req.body;
   pool.query('INSERT INTO todos (text) VALUES ($1) RETURNING *', [text])
     .then((result) => {
-      console.log("Hello from router.post", req.body)
       res.send(result.rows[0]);
     })
     .catch((err) => {
@@ -27,12 +26,19 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   const { id } = req.params;
-  pool.query('UPDATE todos SET completed = TRUE WHERE id = $1 RETURNING *', [id])
+  console.log(`PUT request received for todo ID: ${id} with body:`, req.body);
+  pool.query('UPDATE todos SET "isComplete" = TRUE WHERE id = $1 RETURNING *', [id])
     .then((result) => {
-      res.send(result.rows[0]);
+      if (result.rows.length === 0) {
+        console.log(`Todo ID ${id} not found.`);
+        res.status(404).send('Todo not found');
+      } else {
+        console.log(`Todo ID ${id} marked as complete.`);
+        res.send(result.rows[0]);
+      }
     })
     .catch((err) => {
-      console.log(err);
+      console.log('PUT /todos/:id error:', err);
       res.sendStatus(500);
     });
 });
