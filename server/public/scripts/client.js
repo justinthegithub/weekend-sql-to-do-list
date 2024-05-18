@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-
     function loadToDos() {
         axios({
             method: 'get',
@@ -39,8 +38,23 @@ document.addEventListener('DOMContentLoaded', function() {
             for (let i = 0; i < toDos.length; i++) {
                 let todo = toDos[i];
                 const toDoItem = document.createElement('li');
-                toDoItem.setAttribute('data-testid', 'toDoItem')
+                toDoItem.setAttribute('data-testid', 'toDoItem');
                 toDoItem.textContent = todo.text;
+    
+                const completeButton = document.createElement('button');
+                completeButton.textContent = 'Complete';
+                completeButton.addEventListener('click', function() {
+                    completeTodo(todo.id, toDoItem);
+                });
+    
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', function() {
+                    deleteTodo(todo.id);
+                });
+    
+                toDoItem.appendChild(completeButton);
+                toDoItem.appendChild(deleteButton);
                 todoList.appendChild(toDoItem);
             }
         })
@@ -48,6 +62,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(error);
         });
     }
+    
+
+    
 
     loadToDos();
 });
