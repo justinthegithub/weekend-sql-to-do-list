@@ -12,7 +12,6 @@ router.get('/', (req, res) => {
     });
 });
 
-
 router.post('/', (req, res) => {
   const { text } = req.body;
   pool.query('INSERT INTO todos (text) VALUES ($1) RETURNING *', [text])
@@ -38,20 +37,16 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/id', (req, res)=>{
-  const {id} = req.params;
-  pool.query('DELETE FROM todos WHERE id =$1', [id])
-  .then(()=> {
-    res.sendStatus(204);
-  })
-  .catch((err)=>{
-    console.log(err);
-    res.sendStatus(500);
-  });
-})
-
-
-
-
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  pool.query('DELETE FROM todos WHERE id = $1', [id])
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+});
 
 module.exports = router;
